@@ -140,7 +140,6 @@ ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=2, sticky="EW")
 # ----------------------------CONTROLES--------------------------------------------
 frm_controles = ttk.Frame(f_principal, padding=10, )
 frm_controles.grid(column=0, row=3, sticky=(E))
-ttk.Button(frm_controles, text="Prueba", command=lambda: ventana_servers(padre=raiz)).grid(column=3, row=0, )
 ttk.Button(frm_controles, text="Aceptar", command=lambda: activar_servidor(raiz)).grid(column=0, row=0, )
 ttk.Button(frm_controles, text="Cancelar",
            command=lambda: cerrar_aplicacion(aplicacion=raiz)
