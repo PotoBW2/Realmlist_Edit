@@ -1,14 +1,15 @@
 import threading
+from threading import *
 
 from crud_servidor import *
 from configure_pings import *
-from threading import *
+from servers import *
 import time
 from ping3 import ping as pineador
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.00")
+raiz.title("RealmlistWoW Editor v1.01")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 
@@ -28,8 +29,8 @@ def activar_servidor(objeto):
             realmlist.write('set realmlist ' + datos["direccion"])
         else:
             realmlist.write(
-                'set realmlist ' + datos["num1"] + "." + datos["num2"] + "." + datos["num3"] + "." + datos[
-                    "num4"] + ".")
+                'set realmlist ' + str(datos["num1"]) + "." + str(datos["num2"]) + "." + str(datos["num3"]) + "." + str(
+                    datos["num4"]) + ".")
         realmlist.close()
         guardar_configuracion_ini("servidor_actual", objeto.servidor.get())
         cerrar_aplicacion(aplicacion=objeto)
@@ -47,6 +48,9 @@ raiz.servidor = StringVar()
 raiz.servidor.set(servidor_actual())
 raiz.hilo = True
 raiz.nueva_direccion = False
+raiz.pines = []
+
+
 # -------------------------------------------------------------------------------
 # -----------------------------------HILO----------------------------------------
 def pinear(raiz):
@@ -98,10 +102,9 @@ f_principal.grid()
 # ----------------------------SERVIDOR--------------------------------------------
 f_servidor = ttk.Frame(f_principal, padding=10, )
 f_servidor.grid(column=0, row=0)
-raiz.cb_servidores = ttk.Combobox(f_servidor, textvariable=raiz.servidor, values=tupla_servidores, state="readonly",
-                                  width=20)
-raiz.cb_servidores.grid(column=0, row=0)
-raiz.cb_servidores.bind("<<ComboboxSelected>>",lambda e: reiniciar_pings(raiz, e))
+raiz.E_servidores = ttk.Entry(f_servidor, textvariable=raiz.servidor, width=20, state="readonly")
+raiz.E_servidores.grid(column=0, row=0)
+raiz.E_servidores.bind("<ButtonPress-1>", lambda e: ventana_servers(e, padre=raiz))
 ttk.Button(f_servidor, text="Editar",
            command=lambda: ventana_editar_servidor(padre=raiz, nombre_servidor=raiz.servidor.get())).grid(column=2,
                                                                                                           row=0)
@@ -135,8 +138,9 @@ ttk.Button(frm_latencia, text="Configurar", command=lambda: ventana_configurar_p
 # ---------------------------------------------------------------------------------
 ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=2, sticky="EW")
 # ----------------------------CONTROLES--------------------------------------------
-frm_controles = ttk.Frame(f_principal, padding=10,)
+frm_controles = ttk.Frame(f_principal, padding=10, )
 frm_controles.grid(column=0, row=3, sticky=(E))
+ttk.Button(frm_controles, text="Prueba", command=lambda: ventana_servers(padre=raiz)).grid(column=3, row=0, )
 ttk.Button(frm_controles, text="Aceptar", command=lambda: activar_servidor(raiz)).grid(column=0, row=0, )
 ttk.Button(frm_controles, text="Cancelar",
            command=lambda: cerrar_aplicacion(aplicacion=raiz)

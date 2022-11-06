@@ -85,7 +85,6 @@ def cerrar_ventana_agregar_servidor(padre, hijo, nombre_servidor=None):
     padre.attributes("-topmost", 1)
     hijo.destroy()
     if nombre_servidor != None:
-        padre.cb_servidores["values"] = obtener_servidores()
         padre.servidor.set(nombre_servidor)
 
 
@@ -187,7 +186,6 @@ def eliminar_servidor(padre, nombre_servidor):
     if respuesta:
         borrar_servidor(nombre_servidor)
         lista_de_servidores = obtener_servidores()
-        padre.cb_servidores["values"] = lista_de_servidores
         padre.servidor.set(lista_de_servidores[0])
     padre.state(NORMAL)
     padre.attributes("-topmost", 1)

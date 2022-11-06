@@ -4,6 +4,8 @@ import bdatos
 import configparser
 import os
 import errno
+import time
+from ping3 import ping as pineador
 
 # ---------------------VARIABLES----------------------------
 ANCHO = 2
@@ -129,6 +131,7 @@ def reiniciar_pings(raiz, e):
     raiz.F_cobertura.configure(style="Red.TFrame")
     raiz.nueva_direccion = True
 
+
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -138,3 +141,80 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
+
+def maximo_ping2(raiz, id):
+    pines = raiz.tv_servidores.hilos[id]["pings"]
+    MAX = None
+    for pin in pines:
+        if pin != None:
+            if MAX == None or MAX < pin:
+                MAX = pin
+    return redondear_o_Nulear(MAX)
+
+
+def minimo_ping2(raiz, id):
+    pines = raiz.tv_servidores.hilos[id]["pings"]
+    MIN = None
+    for pin in pines:
+        if pin != None:
+            if MIN == None or MIN > pin:
+                MIN = pin
+    return redondear_o_Nulear(MIN)
+
+
+def promedio_ping2(raiz, id):
+    pines = raiz.tv_servidores.hilos[id]["pings"]
+    suma_total = None
+    for pin in pines:
+        if pin != None:
+            if suma_total == None:
+                suma_total = pin
+            else:
+                suma_total += pin
+    if suma_total == None:
+        return redondear_o_Nulear(None)
+    else:
+        return redondear_o_Nulear(suma_total / len(pines))
+
+
+def perdida_ping2(raiz, id):
+    pines = raiz.tv_servidores.hilos[id]["pings"]
+    suma_total = 0
+    for pin in pines:
+        if pin == None:
+            suma_total += 1
+    return redondear_o_Nulear(suma_total / len(pines) * 100)
+
+
+def pinear2(raiz, id):
+    if raiz.tv_servidores.condicional:
+        raiz.tv_servidores.set(id, 'MAX', str(maximo_ping2(raiz, id)) + "ms")
+        raiz.tv_servidores.set(id, 'MIN', str(minimo_ping2(raiz, id)) + "ms")
+        raiz.tv_servidores.set(id, 'PROM', str(promedio_ping2(raiz, id)) + "ms")
+        raiz.tv_servidores.set(id, 'LOST', str(perdida_ping2(raiz, id)) + "%")
+
+def guardar_solo_sesenta_en_un_lista(raiz,elemento,id):
+    if len(raiz.tv_servidores.hilos[id]["pings"]) > 60:
+        raiz.tv_servidores.hilos[id]["pings"].pop(0)
+    raiz.tv_servidores.hilos[id]["pings"].append(elemento)
+
+def calcular_ping2(raiz, id, nombre):
+    while raiz.tv_servidores.condicional:
+        direccion = bdatos.obtener_direccion(nombre)
+        inicio = time.time()
+        ping = pineador(direccion,timeout=1)
+        final = time.time()
+        if type(ping) in (float, int):
+            ping = ping * 1000
+            lantencia = round(ping) / 1000
+            tiempo_de_espera = 1 - lantencia
+            guardar_solo_sesenta_en_un_lista(raiz, ping, id)
+            if tiempo_de_espera > 0:
+                time.sleep(tiempo_de_espera)
+        else:
+            tiempo_de_espera = (1000 - (final - inicio)) / 1000
+            guardar_solo_sesenta_en_un_lista(raiz, None, id)
+            if tiempo_de_espera > 0:
+                time.sleep(tiempo_de_espera)
+        pinear2(raiz, id)

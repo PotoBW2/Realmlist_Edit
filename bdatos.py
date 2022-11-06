@@ -120,6 +120,17 @@ def cargar_servidores():
     return datos
 
 
+def cargar_servidores2():
+    conn = existe_bd()
+    cursor = conn.cursor()
+    instruccion = f"SELECT * FROM Servidor;"
+    cursor.execute(instruccion)
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return datos
+
+
 def existe_servidor_url(url, id_servidor=0):
     conn = existe_bd()
     cursor = conn.cursor()
@@ -317,7 +328,7 @@ def guardar_ping(nombre_servidor, latencia="NULL"):
             instruccion5 = "SELECT MIN(id_ping) FROM ping;"
             cursor.execute(instruccion5)
             id = cursor.fetchall()[0][0]
-            instruccion3 = "DELETE FROM ping WHERE id_ping ="+str(id)
+            instruccion3 = "DELETE FROM ping WHERE id_ping =" + str(id)
             cursor.execute(instruccion3)
         conn.commit()
         conn.close()
