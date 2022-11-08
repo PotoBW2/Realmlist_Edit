@@ -218,3 +218,42 @@ def calcular_ping2(raiz, id, nombre):
             if tiempo_de_espera > 0:
                 time.sleep(tiempo_de_espera)
         pinear2(raiz, id)
+
+def maximo_ping3(list):
+    MAX = None
+    for pin in list:
+        if pin != None:
+            if MAX == None or MAX < pin:
+                MAX = pin
+    return redondear_o_Nulear(MAX)
+
+
+def minimo_ping3(list):
+    MIN = None
+    for pin in list:
+        if pin != None:
+            if MIN == None or MIN > pin:
+                MIN = pin
+    return redondear_o_Nulear(MIN)
+
+
+def promedio_ping3(list):
+    suma_total = None
+    for pin in list:
+        if pin != None:
+            if suma_total == None:
+                suma_total = pin
+            else:
+                suma_total += pin
+    if suma_total == None:
+        return redondear_o_Nulear(None)
+    else:
+        return redondear_o_Nulear(suma_total / len(list))
+
+
+def perdida_ping3(list):
+    suma_total = 0
+    for pin in list:
+        if pin == None:
+            suma_total += 1
+    return redondear_o_Nulear(suma_total / len(list) * 100)

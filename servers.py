@@ -22,6 +22,7 @@ def cambiar_servidor_principal(raiz, e, padre):
     padre.L_perdidaping["text"] = "LOST: ---"
     padre.F_cobertura.configure(style="Red.TFrame")
     padre.nueva_direccion = True
+    padre.ping_actual = []
     cerrar_ventana_configuracion(padre, raiz)
 
 
