@@ -16,12 +16,7 @@ def cerrar_ventana_configuracion(padre, hijo):
 
 def cambiar_servidor_principal(raiz, e, padre):
     padre.servidor.set(raiz.tv_servidores.item(raiz.tv_servidores.focus())["values"][0])
-    padre.L_maximoping["text"] = "MAX: ---"
-    padre.L_minimoping["text"] = "MIN: ---"
-    padre.L_promedioping["text"] = "PROM: ---"
-    padre.L_perdidaping["text"] = "LOST: ---"
-    padre.F_cobertura.configure(style="Red.TFrame")
-    padre.nueva_direccion = True
+    reiniciar_pings(padre, e)
     padre.ping_actual = []
     cerrar_ventana_configuracion(padre, raiz)
 

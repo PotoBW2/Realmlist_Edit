@@ -25,13 +25,6 @@ def crear_base_de_datos():
         Servidorid_servidor integer(2) NOT NULL,  
         FOREIGN KEY(Servidorid_servidor) REFERENCES Servidor(id_servidor));
         """
-    instruccion2 = """
-    CREATE TABLE ping (
-        id_ping             integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
-        latencia            integer(4), 
-        Servidorid_servidor integer(2) NOT NULL, 
-        FOREIGN KEY(Servidorid_servidor) REFERENCES Servidor(id_servidor));
-    """
     instruccion10 = """
     CREATE TABLE Servidor (
       id_servidor     integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -49,10 +42,6 @@ def crear_base_de_datos():
     CREATE UNIQUE INDEX ip_id_ip 
         ON ip (id_ip);
     """
-    instruccion5 = """
-    CREATE UNIQUE INDEX ping_id_ping 
-        ON ping (id_ping);
-    """
     instruccion6 = """
     CREATE UNIQUE INDEX Servidor_id_servidor 
         ON Servidor (id_servidor);
@@ -68,11 +57,9 @@ def crear_base_de_datos():
     INSERT INTO ip(primero, segundo, tercero, cuarto, Servidorid_servidor) VALUES ( 127, 0, 0, 1, 1);
     """
     cursor.execute(instruccion)
-    cursor.execute(instruccion2)
     cursor.execute(instruccion10)
     cursor.execute(instruccion3)
     cursor.execute(instruccion4)
-    cursor.execute(instruccion5)
     cursor.execute(instruccion6)
     cursor.execute(instruccion7)
     cursor.execute(instruccion8)
@@ -308,90 +295,6 @@ def obtener_id_servidor(nombre_servidor, exepto=0):
 
 def obtener_id_servidor_sin_fallos(nombre_servidor):
     return obtener_id_servidor(nombre_servidor=nombre_servidor)[0][0]
-
-
-def guardar_ping(nombre_servidor, latencia="NULL"):
-    conn = existe_bd()
-    cursor = conn.cursor()
-    id = obtener_id_servidor(nombre_servidor)
-    if len(id) != 0:
-        id = id[0][0]
-        instruccion = "DELETE FROM ping WHERE Servidorid_servidor!=" + str(id) + ";"
-        cursor.execute(instruccion)
-        instruccion2 = "INSERT INTO ping( latencia, Servidorid_servidor) VALUES ( " + str(latencia) + ", " + str(
-            id) + ");"
-        cursor.execute(instruccion2)
-        instruccion4 = "SELECT COUNT(*) FROM ping;"
-        cursor.execute(instruccion4)
-        cantidad = cursor.fetchall()[0][0]
-        if cantidad > int(utiles.cantidad_pings()):
-            instruccion5 = "SELECT MIN(id_ping) FROM ping;"
-            cursor.execute(instruccion5)
-            id = cursor.fetchall()[0][0]
-            instruccion3 = "DELETE FROM ping WHERE id_ping =" + str(id)
-            cursor.execute(instruccion3)
-        conn.commit()
-        conn.close()
-
-
-def maximo_ping():
-    conn = existe_bd()
-    cursor = conn.cursor()
-    instruccion = "SELECT MAX(latencia) FROM ping;"
-    cursor.execute(instruccion)
-    data = cursor.fetchall()[0][0]
-    conn.commit()
-    conn.close()
-    return data
-
-
-def minimo_ping():
-    conn = existe_bd()
-    cursor = conn.cursor()
-    instruccion = "SELECT MIN(latencia) FROM ping;"
-    cursor.execute(instruccion)
-    data = cursor.fetchall()[0][0]
-    conn.commit()
-    conn.close()
-    return data
-
-
-def promedio_ping():
-    conn = existe_bd()
-    cursor = conn.cursor()
-    instruccion = "SELECT AVG(latencia) FROM ping;"
-    cursor.execute(instruccion)
-    data = cursor.fetchall()[0][0]
-    conn.commit()
-    conn.close()
-    return data
-
-
-def perdida_ping():
-    conn = existe_bd()
-    cursor = conn.cursor()
-    instruccion = "SELECT COUNT(*) FROM ping;"
-    cursor.execute(instruccion)
-    cantidad = cursor.fetchall()[0][0]
-    instruccion2 = "SELECT COUNT(*) FROM ping WHERE latencia IS NULL;"
-    cursor.execute(instruccion2)
-    perdida = cursor.fetchall()[0][0]
-    conn.commit()
-    conn.close()
-    try:
-        respuesta = round(perdida / cantidad * 100)
-    except:
-        respuesta = 0
-    return respuesta
-
-
-def borrar_pings():
-    conn = existe_bd()
-    cursor = conn.cursor()
-    instruccion = "DELETE FROM ping;"
-    cursor.execute(instruccion)
-    conn.commit()
-    conn.close()
 
 # ----------EJEMPLOS------------------------------------------
 # def createDB():

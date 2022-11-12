@@ -9,7 +9,7 @@ from ping3 import ping as pineador
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.01")
+raiz.title("RealmlistWoW Editor v1.02")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 
@@ -56,11 +56,11 @@ raiz.ping_actual = []
 # -----------------------------------HILO----------------------------------------
 def pinear(raiz):
     if not raiz.nueva_direccion:
-        raiz.L_maximoping["text"] = "MAX: " + str(maximo_ping3(raiz.ping_actual)) + "ms"
-        raiz.L_minimoping["text"] = "MIN: " + str(minimo_ping3(raiz.ping_actual)) + "ms"
-        promedio = promedio_ping3(raiz.ping_actual)
+        raiz.L_maximoping["text"] = "MAX: " + str(maximo_ping(raiz.ping_actual)) + "ms"
+        raiz.L_minimoping["text"] = "MIN: " + str(minimo_ping(raiz.ping_actual)) + "ms"
+        promedio = promedio_ping(raiz.ping_actual)
         raiz.L_promedioping["text"] = "PROM: " + str(promedio) + "ms"
-        raiz.L_perdidaping["text"] = "LOST: " + str(perdida_ping3(raiz.ping_actual)) + "%"
+        raiz.L_perdidaping["text"] = "LOST: " + str(perdida_ping(raiz.ping_actual)) + "%"
         if promedio != "---" and promedio < int(regular_ping()):
             raiz.F_cobertura.configure(style="Green.TFrame")
         elif promedio != "---" and promedio < int(mal_ping()):
@@ -73,27 +73,10 @@ def pinear(raiz):
 def calcular_ping(raiz):
     while raiz.hilo:
         direccion = obtener_direccion(raiz.servidor.get())
-        inicio = time.time()
-        servidor = raiz.servidor.get()
-        ping = pineador(direccion,timeout=1)
-        final = time.time()
-        if type(ping) in (float, int):
-            ping = ping * 1000
-            lantencia = round(ping) / 1000
-            tiempo_de_espera = 1 - lantencia
-            if len(raiz.ping_actual) > 60:
-                raiz.ping_actual.pop(0)
-            raiz.ping_actual.append(ping)
-            if tiempo_de_espera > 0:
-                time.sleep(tiempo_de_espera)
-        else:
-            tiempo_de_espera = (1000 - (final - inicio)) / 1000
-            if len(raiz.ping_actual) > 60:
-                raiz.ping_actual.pop(0)
-            raiz.ping_actual.append(None)
-            if tiempo_de_espera > 0:
-                time.sleep(tiempo_de_espera)
+        tiempo_de_espera = ping_en_profundidad(raiz.ping_actual, direccion)
         pinear(raiz)
+        eliminar_pings_vencidos(raiz.ping_actual)
+        esperar(tiempo_de_espera)
 
 
 pineaje = threading.Thread(name="pineaje", target=lambda: calcular_ping(raiz), daemon=True)

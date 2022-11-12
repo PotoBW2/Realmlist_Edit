@@ -112,7 +112,6 @@ def cantidad_pings():
 
 def cerrar_aplicacion(aplicacion):
     aplicacion.hilo = False
-    bdatos.borrar_pings()
     aplicacion.destroy()
 
 
@@ -143,83 +142,24 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-def maximo_ping2(raiz, id):
-    pines = raiz.tv_servidores.hilos[id]["pings"]
-    MAX = None
-    for pin in pines:
-        if pin != None:
-            if MAX == None or MAX < pin:
-                MAX = pin
-    return redondear_o_Nulear(MAX)
-
-
-def minimo_ping2(raiz, id):
-    pines = raiz.tv_servidores.hilos[id]["pings"]
-    MIN = None
-    for pin in pines:
-        if pin != None:
-            if MIN == None or MIN > pin:
-                MIN = pin
-    return redondear_o_Nulear(MIN)
-
-
-def promedio_ping2(raiz, id):
-    pines = raiz.tv_servidores.hilos[id]["pings"]
-    suma_total = None
-    for pin in pines:
-        if pin != None:
-            if suma_total == None:
-                suma_total = pin
-            else:
-                suma_total += pin
-    if suma_total == None:
-        return redondear_o_Nulear(None)
-    else:
-        return redondear_o_Nulear(suma_total / len(pines))
-
-
-def perdida_ping2(raiz, id):
-    pines = raiz.tv_servidores.hilos[id]["pings"]
-    suma_total = 0
-    for pin in pines:
-        if pin == None:
-            suma_total += 1
-    return redondear_o_Nulear(suma_total / len(pines) * 100)
-
-
 def pinear2(raiz, id):
     if raiz.tv_servidores.condicional:
-        raiz.tv_servidores.set(id, 'MAX', str(maximo_ping2(raiz, id)) + "ms")
-        raiz.tv_servidores.set(id, 'MIN', str(minimo_ping2(raiz, id)) + "ms")
-        raiz.tv_servidores.set(id, 'PROM', str(promedio_ping2(raiz, id)) + "ms")
-        raiz.tv_servidores.set(id, 'LOST', str(perdida_ping2(raiz, id)) + "%")
+        raiz.tv_servidores.set(id, 'MAX', str(maximo_ping(raiz.tv_servidores.hilos[id]["pings"])) + "ms")
+        raiz.tv_servidores.set(id, 'MIN', str(minimo_ping(raiz.tv_servidores.hilos[id]["pings"])) + "ms")
+        raiz.tv_servidores.set(id, 'PROM', str(promedio_ping(raiz.tv_servidores.hilos[id]["pings"])) + "ms")
+        raiz.tv_servidores.set(id, 'LOST', str(perdida_ping(raiz.tv_servidores.hilos[id]["pings"])) + "%")
 
-def guardar_solo_sesenta_en_un_lista(raiz,elemento,id):
-    if len(raiz.tv_servidores.hilos[id]["pings"]) > 60:
-        raiz.tv_servidores.hilos[id]["pings"].pop(0)
-    raiz.tv_servidores.hilos[id]["pings"].append(elemento)
 
 def calcular_ping2(raiz, id, nombre):
     while raiz.tv_servidores.condicional:
         direccion = bdatos.obtener_direccion(nombre)
-        inicio = time.time()
-        ping = pineador(direccion,timeout=1)
-        final = time.time()
-        if type(ping) in (float, int):
-            ping = ping * 1000
-            lantencia = round(ping) / 1000
-            tiempo_de_espera = 1 - lantencia
-            guardar_solo_sesenta_en_un_lista(raiz, ping, id)
-            if tiempo_de_espera > 0:
-                time.sleep(tiempo_de_espera)
-        else:
-            tiempo_de_espera = (1000 - (final - inicio)) / 1000
-            guardar_solo_sesenta_en_un_lista(raiz, None, id)
-            if tiempo_de_espera > 0:
-                time.sleep(tiempo_de_espera)
+        tiempo_de_espera = ping_en_profundidad(raiz.tv_servidores.hilos[id]["pings"], direccion)
         pinear2(raiz, id)
+        eliminar_pings_vencidos(raiz.tv_servidores.hilos[id]["pings"])
+        esperar(tiempo_de_espera)
 
-def maximo_ping3(list):
+
+def maximo_ping(list):
     MAX = None
     for pin in list:
         if pin != None:
@@ -228,7 +168,7 @@ def maximo_ping3(list):
     return redondear_o_Nulear(MAX)
 
 
-def minimo_ping3(list):
+def minimo_ping(list):
     MIN = None
     for pin in list:
         if pin != None:
@@ -237,7 +177,7 @@ def minimo_ping3(list):
     return redondear_o_Nulear(MIN)
 
 
-def promedio_ping3(list):
+def promedio_ping(list):
     suma_total = None
     for pin in list:
         if pin != None:
@@ -251,9 +191,34 @@ def promedio_ping3(list):
         return redondear_o_Nulear(suma_total / len(list))
 
 
-def perdida_ping3(list):
+def perdida_ping(list):
     suma_total = 0
     for pin in list:
         if pin == None:
             suma_total += 1
     return redondear_o_Nulear(suma_total / len(list) * 100)
+
+
+def ping_en_profundidad(list, direccion):
+    inicio = time.time()
+    ping = pineador(direccion, timeout=1)
+    final = time.time()
+    if type(ping) in (float, int):
+        ping = ping * 1000
+        lantencia = round(ping) / 1000
+        tiempo_de_espera = 1 - lantencia
+        list.append(ping)
+    else:
+        tiempo_de_espera = (1000 - (final - inicio)) / 1000
+        list.append(None)
+    return tiempo_de_espera
+
+
+def eliminar_pings_vencidos(list):
+    if len(list) > int(leer_configuracion("cantidad_pings")):
+        list.pop(0)
+
+
+def esperar(tiempo_de_espera):
+    if tiempo_de_espera > 0:
+        time.sleep(tiempo_de_espera)
