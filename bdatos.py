@@ -230,8 +230,6 @@ def borrar_servidor(nombre_servidor):
     cursor.execute(instruccion3)
     instruccion4 = "DELETE FROM ip WHERE Servidorid_servidor = " + str(dato[0][0]) + ";"
     cursor.execute(instruccion4)
-    instruccion5 = "DELETE FROM ping WHERE Servidorid_servidor = " + str(dato[0][0]) + ";"
-    cursor.execute(instruccion5)
     conn.commit()
     conn.close()
 

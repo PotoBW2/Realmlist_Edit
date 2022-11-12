@@ -6,11 +6,6 @@ CREATE TABLE ip (
 	cuarto              integer(3) DEFAULT 0 NOT NULL, 
 	Servidorid_servidor integer(2) NOT NULL,  
 	FOREIGN KEY(Servidorid_servidor) REFERENCES Servidor(id_servidor));
-CREATE TABLE ping (
-	id_ping             integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
-	latencia            integer(3), 
-	Servidorid_servidor integer(2) NOT NULL, 
-	FOREIGN KEY(Servidorid_servidor) REFERENCES Servidor(id_servidor));
 CREATE TABLE Servidor (
   id_servidor     integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
   nombre_servidor varchar(20) NOT NULL UNIQUE
@@ -22,8 +17,6 @@ CREATE TABLE url (
   FOREIGN KEY(Servidorid_servidor) REFERENCES Servidor(id_servidor));
 CREATE UNIQUE INDEX ip_id_ip 
 	ON ip (id_ip);
-CREATE UNIQUE INDEX ping_id_ping 
-	ON ping (id_ping);
 CREATE UNIQUE INDEX Servidor_id_servidor 
 	ON Servidor (id_servidor);
 CREATE UNIQUE INDEX url_id_url 

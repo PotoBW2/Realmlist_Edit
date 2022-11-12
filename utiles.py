@@ -193,10 +193,12 @@ def promedio_ping(list):
 
 def perdida_ping(list):
     suma_total = 0
-    for pin in list:
-        if pin == None:
-            suma_total += 1
-    return redondear_o_Nulear(suma_total / len(list) * 100)
+    if len(list) != 0:
+        for pin in list:
+            if pin == None:
+                suma_total += 1
+        return redondear_o_Nulear(suma_total / len(list) * 100)
+    return "---"
 
 
 def ping_en_profundidad(list, direccion):

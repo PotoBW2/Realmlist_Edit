@@ -3,7 +3,7 @@ from tkinter import ttk
 from re import split
 from bdatos import *
 from tkinter import messagebox
-from utiles import obtener_servidores, resource_path
+from utiles import obtener_servidores, resource_path, reiniciar_pings
 
 
 def desactivar_conexion(objeto):
@@ -52,6 +52,8 @@ def agregar_editar_servidor(padre, objeto, metodo=1, id_servidor=0):
                     else:
                         modificar_servidor_IP(nombre_servidor, num_primero, num_segundo, num_tercero, num_cuarto,
                                               id_servidor)
+                    reiniciar_pings(padre, None)
+                    padre.ping_actual = []
                     cerrar_ventana_agregar_servidor(padre, objeto, nombre_servidor)
             else:
                 url = objeto.URL.get()
@@ -67,6 +69,8 @@ def agregar_editar_servidor(padre, objeto, metodo=1, id_servidor=0):
                             insertar_servidor_URL(nombre_servidor, url)
                         else:
                             modificar_servidor_URL(nombre_servidor, url, id_servidor)
+                        reiniciar_pings(padre, None)
+                        padre.ping_actual = []
                         cerrar_ventana_agregar_servidor(padre, objeto, nombre_servidor)
                 else:
                     objeto.state("withdrawn")
@@ -187,5 +191,7 @@ def eliminar_servidor(padre, nombre_servidor):
         borrar_servidor(nombre_servidor)
         lista_de_servidores = obtener_servidores()
         padre.servidor.set(lista_de_servidores[0])
+    reiniciar_pings(padre, None)
+    padre.ping_actual = []
     padre.state(NORMAL)
     padre.attributes("-topmost", 1)
