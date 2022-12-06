@@ -9,7 +9,7 @@ from ping3 import ping as pineador
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.02")
+raiz.title("RealmlistWoW Editor v1.03")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 

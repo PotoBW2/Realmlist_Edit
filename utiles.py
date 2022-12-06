@@ -179,16 +179,18 @@ def minimo_ping(list):
 
 def promedio_ping(list):
     suma_total = None
+    conteo = 0
     for pin in list:
         if pin != None:
             if suma_total == None:
                 suma_total = pin
             else:
                 suma_total += pin
+            conteo += 1
     if suma_total == None:
         return redondear_o_Nulear(None)
     else:
-        return redondear_o_Nulear(suma_total / len(list))
+        return redondear_o_Nulear(suma_total / conteo)
 
 
 def perdida_ping(list):
@@ -203,7 +205,10 @@ def perdida_ping(list):
 
 def ping_en_profundidad(list, direccion):
     inicio = time.time()
-    ping = pineador(direccion, timeout=1)
+    try:
+        ping = pineador(direccion, timeout=1)
+    except:
+        ping = False
     final = time.time()
     if type(ping) in (float, int):
         ping = ping * 1000
