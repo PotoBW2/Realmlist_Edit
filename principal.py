@@ -30,7 +30,7 @@ def activar_servidor(objeto):
         else:
             realmlist.write(
                 'set realmlist ' + str(datos["num1"]) + "." + str(datos["num2"]) + "." + str(datos["num3"]) + "." + str(
-                    datos["num4"]) + ".")
+                    datos["num4"]))
         realmlist.close()
         guardar_configuracion_ini("servidor_actual", objeto.servidor.get())
         cerrar_aplicacion(aplicacion=objeto)
