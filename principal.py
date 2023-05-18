@@ -6,6 +6,8 @@ from configure_pings import *
 from servers import *
 import time
 from ping3 import ping as pineador
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 raiz = Tk()
@@ -50,6 +52,8 @@ raiz.hilo = True
 raiz.nueva_direccion = False
 raiz.pines = []
 raiz.ping_actual = []
+fig = plt.figure(figsize=(3.8,2.2))
+ax = fig.add_subplot()
 
 
 # -------------------------------------------------------------------------------
@@ -67,6 +71,14 @@ def pinear(raiz):
             raiz.F_cobertura.configure(style="Orange.TFrame")
         else:
             raiz.F_cobertura.configure(style="Red.TFrame")
+        line, = ax.plot(list(range(len(raiz.ping_actual))),[-100 if x==None else x for x in raiz.ping_actual], color='g')
+        ax.grid(True)
+        ax.plot(list(range(len(raiz.ping_actual))), [-10 for x in list(range(len(raiz.ping_actual)))], color='r')
+        canvas.draw()
+        line.set_ydata([0])
+        line.set_xdata([0])
+
+
     raiz.nueva_direccion = False
 
 
@@ -74,8 +86,11 @@ def calcular_ping(raiz):
     while raiz.hilo:
         direccion = obtener_direccion(raiz.servidor.get())
         tiempo_de_espera = ping_en_profundidad(raiz.ping_actual, direccion)
+        inicio = time.time()
         pinear(raiz)
         eliminar_pings_vencidos(raiz.ping_actual)
+        final = time.time()
+        tiempo_de_espera = (tiempo_de_espera - (final - inicio)) / 1000
         esperar(tiempo_de_espera)
 
 
@@ -125,9 +140,14 @@ ttk.Button(frm_latencia, text="Configurar", command=lambda: ventana_configurar_p
                                                                                                  sticky=(E), )
 # ---------------------------------------------------------------------------------
 ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=2, sticky="EW")
+# ----------------------------GRAFICA----------------------------------------------
+canvas = FigureCanvasTkAgg(fig, master=f_principal)
+canvas.get_tk_widget().grid(column=0, row=3)
+# ---------------------------------------------------------------------------------
+ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=4, sticky="EW")
 # ----------------------------CONTROLES--------------------------------------------
 frm_controles = ttk.Frame(f_principal, padding=10, )
-frm_controles.grid(column=0, row=3, sticky=(E))
+frm_controles.grid(column=0, row=5, sticky=(E))
 ttk.Button(frm_controles, text="Aceptar", command=lambda: activar_servidor(raiz)).grid(column=0, row=0, )
 ttk.Button(frm_controles, text="Cancelar",
            command=lambda: cerrar_aplicacion(aplicacion=raiz)

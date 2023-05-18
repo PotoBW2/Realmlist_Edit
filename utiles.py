@@ -209,16 +209,18 @@ def ping_en_profundidad(list, direccion):
         ping = pineador(direccion, timeout=1)
     except:
         ping = False
-    final = time.time()
     if type(ping) in (float, int):
         ping = ping * 1000
         lantencia = round(ping) / 1000
         tiempo_de_espera = 1 - lantencia
         list.append(ping)
     else:
-        tiempo_de_espera = (1000 - (final - inicio)) / 1000
         list.append(None)
+        final = time.time()
+        tiempo_de_espera = (1000 - (final - inicio)) / 1000
     return tiempo_de_espera
+
+
 
 
 def eliminar_pings_vencidos(list):
