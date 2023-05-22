@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.04")
+raiz.title("RealmlistWoW Editor v1.05")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 
@@ -90,7 +90,10 @@ def calcular_ping(raiz):
         pinear(raiz)
         eliminar_pings_vencidos(raiz.ping_actual)
         final = time.time()
-        tiempo_de_espera = (tiempo_de_espera - (final - inicio)) / 1000
+        print(tiempo_de_espera)
+        tiempo_de_espera = tiempo_de_espera - (final - inicio)
+        print(tiempo_de_espera)
+        print("    ")
         esperar(tiempo_de_espera)
 
 
