@@ -206,18 +206,18 @@ def perdida_ping(list):
 def ping_en_profundidad(list, direccion):
     inicio = time.time()
     try:
-        ping = pineador(direccion, timeout=1)
+        ping = pineador(direccion, timeout=4)
     except:
         ping = False
     if type(ping) in (float, int):
         ping = ping * 1000
         lantencia = round(ping) / 1000
-        tiempo_de_espera = 1 - lantencia
+        tiempo_de_espera = 4 - lantencia
         list.append(ping)
     else:
         list.append(None)
         final = time.time()
-        tiempo_de_espera = (1000 - (final - inicio)) / 1000
+        tiempo_de_espera = (4000 - (final - inicio)) / 1000
     return tiempo_de_espera
 
 
