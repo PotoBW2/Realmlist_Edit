@@ -52,7 +52,7 @@ raiz.hilo = True
 raiz.nueva_direccion = False
 raiz.pines = []
 raiz.ping_actual = []
-fig = plt.figure(figsize=(3.8,2.2))
+fig = plt.figure(figsize=(3.8, 2.2))
 ax = fig.add_subplot()
 
 
@@ -71,13 +71,15 @@ def pinear(raiz):
             raiz.F_cobertura.configure(style="Orange.TFrame")
         else:
             raiz.F_cobertura.configure(style="Red.TFrame")
-        line, = ax.plot(list(range(len(raiz.ping_actual))),[-100 if x==None else x for x in raiz.ping_actual], color='g')
+        list1 = list(range(len(raiz.ping_actual)))
+        list2 = [-100 if x == None else x for x in raiz.ping_actual]
+        line, = ax.plot(list1, list2, color='g')
+        plt.ylim(-110,max_eje_y(list2))
         ax.grid(True)
         ax.plot(list(range(len(raiz.ping_actual))), [-10 for x in list(range(len(raiz.ping_actual)))], color='r')
-        canvas.draw()
+        raiz.canvas.draw()
         line.set_ydata([0])
         line.set_xdata([0])
-
 
     raiz.nueva_direccion = False
 
@@ -141,8 +143,8 @@ ttk.Button(frm_latencia, text="Configurar", command=lambda: ventana_configurar_p
 # ---------------------------------------------------------------------------------
 ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=2, sticky="EW")
 # ----------------------------GRAFICA----------------------------------------------
-canvas = FigureCanvasTkAgg(fig, master=f_principal)
-canvas.get_tk_widget().grid(column=0, row=3)
+raiz.canvas = FigureCanvasTkAgg(fig, master=f_principal)
+raiz.canvas.get_tk_widget().grid(column=0, row=3)
 # ---------------------------------------------------------------------------------
 ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=4, sticky="EW")
 # ----------------------------CONTROLES--------------------------------------------
