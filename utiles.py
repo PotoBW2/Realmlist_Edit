@@ -49,8 +49,8 @@ def crear_configuracion():
     except configparser.DuplicateSectionError:
         pass
     configuracion.set("CONFIGURACION", "servidor_actual", "localhost")
-    configuracion.set("CONFIGURACION", "regular_ping", "300")
-    configuracion.set("CONFIGURACION", "mal_ping", "1000")
+    configuracion.set("CONFIGURACION", "regular_ping", "250")
+    configuracion.set("CONFIGURACION", "mal_ping", "500")
     configuracion.set("CONFIGURACION", "cantidad_pings", "60")
     with open(ARCHIVO, "w") as archivo_de_configuracion:
         configuracion.write(archivo_de_configuracion)
