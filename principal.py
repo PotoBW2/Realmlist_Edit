@@ -52,6 +52,10 @@ raiz.hilo = True
 raiz.nueva_direccion = False
 raiz.pines = []
 raiz.ping_actual = []
+raiz.ping_max = []
+raiz.ping_min = []
+raiz.ping_prom = []
+raiz.ping_loss = []
 fig = plt.figure(figsize=(3.8, 2.2))
 ax = fig.add_subplot()
 
@@ -72,14 +76,26 @@ def pinear(raiz):
         else:
             raiz.F_cobertura.configure(style="Red.TFrame")
         list1 = list(range(len(raiz.ping_actual)))
-        list2 = [-100 if x == None else x for x in raiz.ping_actual]
-        line, = ax.plot(list1, list2, color='g')
-        plt.ylim(-110,max_eje_y(list2))
+        list2 = [0 if x == None else x for x in raiz.ping_actual]
+        eje_y = max_eje_y(raiz)
+        plt.ylim(-10, eje_y)
         ax.grid(True)
-        ax.plot(list(range(len(raiz.ping_actual))), [-10 for x in list(range(len(raiz.ping_actual)))], color='r')
+        line2, = ax.plot(list(range(len(raiz.ping_max))), raiz.ping_max, color='y')
+        line3, = ax.plot(list(range(len(raiz.ping_min))), raiz.ping_min, color='b')
+        line5, = ax.plot(list(range(len(raiz.ping_loss))), [x*eje_y/100 for x in raiz.ping_loss], color='r')
+        line, = ax.plot(list(range(len(raiz.ping_prom))), raiz.ping_prom, color='g')
+        line4, = ax.plot(list1, list2, color='purple')
         raiz.canvas.draw()
         line.set_ydata([0])
         line.set_xdata([0])
+        line2.set_ydata([0])
+        line2.set_xdata([0])
+        line3.set_ydata([0])
+        line3.set_xdata([0])
+        line4.set_ydata([0])
+        line4.set_xdata([0])
+        line5.set_ydata([0])
+        line5.set_xdata([0])
 
     raiz.nueva_direccion = False
 
@@ -89,8 +105,11 @@ def calcular_ping(raiz):
         direccion = obtener_direccion(raiz.servidor.get())
         tiempo_de_espera = ping_en_profundidad(raiz.ping_actual, direccion)
         inicio = time.time()
+        obtener_max(raiz)
+        obtener_min(raiz)
+        obtener_prom(raiz)
+        obtener_loss(raiz)
         pinear(raiz)
-        eliminar_pings_vencidos(raiz.ping_actual)
         final = time.time()
         tiempo_de_espera = tiempo_de_espera - (final - inicio)
         esperar(tiempo_de_espera)
@@ -128,13 +147,13 @@ frm_latencia.columnconfigure(2, weight=1)
 frm_latencia.columnconfigure(3, weight=1)
 frm_latencia.columnconfigure(4, weight=1)
 frm_latencia.columnconfigure(5, weight=1)
-raiz.L_minimoping = ttk.Label(frm_latencia, text="MIN: ---", foreground="green")
+raiz.L_minimoping = ttk.Label(frm_latencia, text="MIN: ---", foreground="blue")
 raiz.L_minimoping.grid(column=3, row=0, )
 raiz.L_maximoping = ttk.Label(frm_latencia, text="MAX: ---", foreground="orange")
 raiz.L_maximoping.grid(column=2, row=0, )
 raiz.L_perdidaping = ttk.Label(frm_latencia, text="LOST: ---", foreground="red")
 raiz.L_perdidaping.grid(column=4, row=0, )
-raiz.L_promedioping = ttk.Label(frm_latencia, text="PROM: ---", foreground="blue")
+raiz.L_promedioping = ttk.Label(frm_latencia, text="PROM: ---", foreground="green")
 raiz.L_promedioping.grid(column=1, row=0, )
 raiz.F_cobertura = ttk.Frame(frm_latencia, style="Red.TFrame", width=21, height=21, relief="groove")
 raiz.F_cobertura.grid(column=0, row=0, )

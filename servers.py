@@ -18,6 +18,10 @@ def cambiar_servidor_principal(raiz, e, padre):
     padre.servidor.set(raiz.tv_servidores.item(raiz.tv_servidores.focus())["values"][0])
     reiniciar_pings(padre, e)
     padre.ping_actual = []
+    padre.ping_max = []
+    padre.ping_min = []
+    padre.ping_prom = []
+    padre.ping_loss = []
     cerrar_ventana_configuracion(padre, raiz)
 
 

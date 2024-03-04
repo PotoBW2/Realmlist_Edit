@@ -218,7 +218,8 @@ def ping_en_profundidad(list, direccion):
     else:
         list.append(None)
         final = time.time()
-        tiempo_de_espera = (1 - (final - inicio)) / 1000
+        tiempo_de_espera = (1 - (final - inicio))
+    eliminar_pings_vencidos(list)
     return tiempo_de_espera
 
 
@@ -231,9 +232,14 @@ def esperar(tiempo_de_espera):
     if tiempo_de_espera > 0:
         time.sleep(tiempo_de_espera)
 
-def max_eje_y(list):
+def max_eje_y(raiz):
+    raiz.ping_actual
+    raiz.ping_max
     regular = int(regular_ping())
-    if(len(list)>0):
+    if(len(raiz.ping_actual)>0):
+        list = []
+        list.append(max([0 if x == None else x for x in raiz.ping_actual]))
+        list.append(max([0 if x == "---" else x for x in raiz.ping_max]))
         value = max(list)
         if value <= regular:
             return regular
@@ -245,5 +251,33 @@ def max_eje_y(list):
                 return int(round(value, -2)+100)
     else:
         return regular
+
+def obtener_max(raiz):
+    max_pi = maximo_ping(raiz.ping_actual)
+    if max_pi == "---":
+        max_pi = 0
+    raiz.ping_max.append(max_pi)
+    eliminar_pings_vencidos(raiz.ping_max)
+
+def obtener_min(raiz):
+    min_pi = minimo_ping(raiz.ping_actual)
+    if min_pi == "---":
+        min_pi = 0
+    raiz.ping_min.append(min_pi)
+    eliminar_pings_vencidos(raiz.ping_min)
+
+def obtener_prom(raiz):
+    prom_pi = promedio_ping(raiz.ping_actual)
+    if prom_pi == "---":
+        prom_pi = 0
+    raiz.ping_prom.append(prom_pi)
+    eliminar_pings_vencidos(raiz.ping_prom)
+
+def obtener_loss(raiz):
+    loss_pi = perdida_ping(raiz.ping_actual)
+    if loss_pi == "---":
+        loss_pi = 100
+    raiz.ping_loss.append(loss_pi)
+    eliminar_pings_vencidos(raiz.ping_loss)
 
 
