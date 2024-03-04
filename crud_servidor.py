@@ -54,6 +54,10 @@ def agregar_editar_servidor(padre, objeto, metodo=1, id_servidor=0):
                                               id_servidor)
                     reiniciar_pings(padre, None)
                     padre.ping_actual = []
+                    padre.ping_max = []
+                    padre.ping_min = []
+                    padre.ping_prom = []
+                    padre.ping_loss = []
                     cerrar_ventana_agregar_servidor(padre, objeto, nombre_servidor)
             else:
                 url = objeto.URL.get()
@@ -71,6 +75,10 @@ def agregar_editar_servidor(padre, objeto, metodo=1, id_servidor=0):
                             modificar_servidor_URL(nombre_servidor, url, id_servidor)
                         reiniciar_pings(padre, None)
                         padre.ping_actual = []
+                        padre.ping_max = []
+                        padre.ping_min = []
+                        padre.ping_prom = []
+                        padre.ping_loss = []
                         cerrar_ventana_agregar_servidor(padre, objeto, nombre_servidor)
                 else:
                     objeto.state("withdrawn")
@@ -193,5 +201,9 @@ def eliminar_servidor(padre, nombre_servidor):
         padre.servidor.set(lista_de_servidores[0])
     reiniciar_pings(padre, None)
     padre.ping_actual = []
+    padre.ping_max = []
+    padre.ping_min = []
+    padre.ping_prom = []
+    padre.ping_loss = []
     padre.state(NORMAL)
     padre.attributes("-topmost", 1)
