@@ -232,15 +232,18 @@ def esperar(tiempo_de_espera):
         time.sleep(tiempo_de_espera)
 
 def max_eje_y(list):
-    value = max(list)
     regular = int(regular_ping())
-    if value <= regular:
-        return regular
-    else:
-        mal = int(mal_ping())
-        if value <= mal:
-            return mal
+    if(len(list)>0):
+        value = max(list)
+        if value <= regular:
+            return regular
         else:
-            return int(round(value, -2)+100)
+            mal = int(mal_ping())
+            if value <= mal:
+                return mal
+            else:
+                return int(round(value, -2)+100)
+    else:
+        return regular
 
 
