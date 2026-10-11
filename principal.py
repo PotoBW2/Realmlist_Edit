@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.07")
+raiz.title("RealmlistWoW Editor v1.08")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 
@@ -57,7 +57,7 @@ raiz.ping_min = []
 raiz.ping_prom = []
 raiz.ping_loss = []
 fig = plt.figure(figsize=(3.8, 2.2))
-ax = fig.add_subplot()
+raiz.ax = fig.add_subplot()
 
 
 # -------------------------------------------------------------------------------
@@ -75,30 +75,17 @@ def pinear(raiz):
             raiz.F_cobertura.configure(style="Orange.TFrame")
         else:
             raiz.F_cobertura.configure(style="Red.TFrame")
-        list1 = list(range(len(raiz.ping_actual)))
-        list2 = [0 if x == None else x for x in raiz.ping_actual]
         eje_y = max_eje_y(raiz)
-        # plt.ylim(-10, eje_y)
+        raiz.ax.set_xlim(0, len(raiz.ping_actual))
+        raiz.ax.set_ylim(-1, eje_y)
         raiz.line2.set_data(list(range(len(raiz.ping_max))), raiz.ping_max)
-
-        print(list(range(len(raiz.ping_max))))
-        print("")
-        print(raiz.ping_max)
-        # raiz.line3.set_data(list(range(len(raiz.ping_min))), raiz.ping_min)
-        # raiz.line5.set_data(list(range(len(raiz.ping_loss))), [x * eje_y / 100 for x in raiz.ping_loss])
-        # raiz.line.set_data(list(range(len(raiz.ping_prom))), raiz.ping_prom)
-        # raiz.line4.set_data(list1, list2)
-        # raiz.line2.set_ydata(raiz.ping_max)
-        # raiz.line2.set_xdata(list(range(len(raiz.ping_max))))
+        raiz.line3.set_data(list(range(len(raiz.ping_min))), raiz.ping_min)
+        raiz.line5.set_data(list(range(len(raiz.ping_loss))), [x * eje_y / 100 for x in raiz.ping_loss])
+        raiz.line.set_data(list(range(len(raiz.ping_prom))), raiz.ping_prom)
+        raiz.line4.set_data(list(range(len(raiz.ping_actual))), raiz.ping_actual)
+        raiz.line2.set_ydata(raiz.ping_max)
+        raiz.line2.set_xdata(list(range(len(raiz.ping_max))))
         raiz.canvas.draw_idle()
-        # raiz.line.set_ydata([0])
-        # raiz.line.set_xdata([0])
-        # raiz.line3.set_ydata([0])
-        # raiz.line3.set_xdata([0])
-        # raiz.line4.set_ydata([0])
-        # raiz.line4.set_xdata([0])
-        # raiz.line5.set_ydata([0])
-        # raiz.line5.set_xdata([0])
 
     raiz.nueva_direccion = False
 
@@ -167,14 +154,12 @@ ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=2, sticky="EW")
 # ----------------------------GRAFICA----------------------------------------------
 raiz.canvas = FigureCanvasTkAgg(fig, master=f_principal)
 raiz.canvas.get_tk_widget().grid(column=0, row=3)
-ax.grid(True)
-ax.set_xlim(0, 1000)
-ax.set_ylim(0, 1000)
-raiz.line2, = ax.plot([], [], color='y')
-raiz.line3, = ax.plot([], [], color='b')
-raiz.line5, = ax.plot([], [], color='r')
-raiz.line, = ax.plot([], [], color='g')
-raiz.line4, = ax.plot([], [], color='purple')
+raiz.ax.grid(True)
+raiz.line2, = raiz.ax.plot([], [], color='y')
+raiz.line3, = raiz.ax.plot([], [], color='b')
+raiz.line5, = raiz.ax.plot([], [], color='r')
+raiz.line, = raiz.ax.plot([], [], color='g')
+raiz.line4, = raiz.ax.plot([], [], color='purple')
 # ---------------------------------------------------------------------------------
 ttk.Separator(f_principal, orient=HORIZONTAL).grid(column=0, row=4, sticky="EW")
 # ----------------------------CONTROLES--------------------------------------------

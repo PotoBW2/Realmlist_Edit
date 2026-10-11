@@ -214,6 +214,8 @@ def ping_en_profundidad(list, direccion):
         ping = ping * 1000
         lantencia = round(ping) / 1000
         tiempo_de_espera = 1 - lantencia
+        if ping > 1000:
+            ping = 1000
         list.append(ping)
     else:
         list.append(None)
@@ -279,5 +281,8 @@ def obtener_loss(raiz):
         loss_pi = 100
     raiz.ping_loss.append(loss_pi)
     eliminar_pings_vencidos(raiz.ping_loss)
+
+def cantidad_pings(raiz):
+    return len(raiz.ping_actual)
 
 
