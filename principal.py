@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.08")
+raiz.title("RealmlistWoW Editor v1.09")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 

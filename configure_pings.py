@@ -37,7 +37,7 @@ def ventana_configurar_pings(padre):
     # ----------------------------------------------------VARIABLES-----------------------------------------------------
     TL_configuracion.regular = IntVar(value=regular_ping())
     TL_configuracion.mal = IntVar(value=mal_ping())
-    TL_configuracion.cantidad = IntVar(value=cantidad_pings())
+    TL_configuracion.cantidad = IntVar(value=conf_cantidad_pings())
     # -----------------------------------------------------VISUAL-------------------------------------------------------
     ttk.Label(TL_configuracion, text="Latencia regular:").grid(column=0, row=0, pady=2)
     ttk.Spinbox(TL_configuracion, from_=1, to=4999, textvariable=TL_configuracion.regular, width=5,

@@ -104,7 +104,7 @@ def mal_ping():
     return leer_configuracion("mal_ping")
 
 
-def cantidad_pings():
+def conf_cantidad_pings():
     return leer_configuracion("cantidad_pings")
 
 
