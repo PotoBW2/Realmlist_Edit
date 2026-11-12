@@ -112,7 +112,7 @@ def ventana_agregar_servidor(padre, nombre_servidor="", conexion=1, num1=192, nu
     TLAgregarServidor.attributes("-topmost", 1)
     TLAgregarServidor.iconbitmap(resource_path("imagenes/logo.ico"))
     TLAgregarServidor.protocol("WM_DELETE_WINDOW", (lambda: cerrar_ventana_agregar_servidor(padre, TLAgregarServidor)))
-    position = split("\+", str(padre.winfo_geometry()))
+    position = padre.winfo_geometry().split("+")
     position.pop(0)
     TLAgregarServidor.geometry("+" + str(int(position[0]) + 50) + "+" + str(int(position[1]) + 50))
     # ----------------------------------------------------VARIABLES-----------------------------------------------------

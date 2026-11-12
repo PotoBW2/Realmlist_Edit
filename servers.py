@@ -65,6 +65,6 @@ def ventana_servers(e, padre):
     TL_servidores.tv_servidores.bind("<<TreeviewSelect>>",
                                      lambda e: cambiar_servidor_principal(TL_servidores, e, padre=padre))
 
-    position = split("\+", str(padre.winfo_geometry()))
+    position = padre.winfo_geometry().split("+")
     position.pop(0)
     TL_servidores.geometry("+" + str(int(position[0]) + 25) + "+" + str(int(position[1]) - 50))

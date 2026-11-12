@@ -31,7 +31,7 @@ def ventana_configurar_pings(padre):
     TL_configuracion.attributes("-topmost", 1)
     TL_configuracion.iconbitmap(resource_path("imagenes/logo.ico"))
     TL_configuracion.protocol("WM_DELETE_WINDOW", (lambda: cerrar_ventana_configuracion(padre, TL_configuracion)))
-    position = split("\+", str(padre.winfo_geometry()))
+    position = padre.winfo_geometry().split("+")
     position.pop(0)
     TL_configuracion.geometry("+" + str(int(position[0]) + 50) + "+" + str(int(position[1]) + 50))
     # ----------------------------------------------------VARIABLES-----------------------------------------------------
