@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 
 raiz = Tk()
-raiz.title("RealmlistWoW Editor v1.10")
+raiz.title("RealmlistWoW Editor v1.11")
 raiz.resizable(False, False)
 raiz.iconbitmap(resource_path("imagenes/logo.ico"))
 
@@ -52,6 +52,7 @@ raiz.hilo = True
 raiz.nueva_direccion = False
 raiz.pines = []
 raiz.ping_actual = []
+raiz.ping_adaptado = []
 raiz.ping_max = []
 raiz.ping_min = []
 raiz.ping_prom = []
@@ -81,14 +82,16 @@ def pinear(raiz):
         raiz.line2.set_data(list(range(len(raiz.ping_max))), raiz.ping_max)
         raiz.line3.set_data(list(range(len(raiz.ping_min))), raiz.ping_min)
         raiz.line5.set_data(list(range(len(raiz.ping_loss))), [x * eje_y / 100 for x in raiz.ping_loss])
-        adaptados = adaptar_pings(raiz)
-        raiz.line4.set_data(list(range(len(adaptados))), adaptados)
+        raiz.line4.set_data(list(range(len(raiz.ping_adaptado))), raiz.ping_adaptado)
         raiz.line.set_data(list(range(len(raiz.ping_prom))), raiz.ping_prom)
         raiz.line2.set_ydata(raiz.ping_max)
         raiz.line2.set_xdata(list(range(len(raiz.ping_max))))
         raiz.canvas.draw_idle()
 
     raiz.nueva_direccion = False
+
+
+
 
 
 def calcular_ping(raiz):
@@ -100,6 +103,7 @@ def calcular_ping(raiz):
         obtener_min(raiz)
         obtener_prom(raiz)
         obtener_loss(raiz)
+        obtener_adaptado(raiz)
         pinear(raiz)
         final = time.time()
         tiempo_de_espera = tiempo_de_espera - (final - inicio)

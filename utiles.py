@@ -289,17 +289,35 @@ def obtener_loss(raiz):
     eliminar_pings_vencidos(raiz.ping_loss)
 
 
+def obtener_adaptado(raiz):
+    if len(raiz.ping_actual) != 0:
+        nuevo = raiz.ping_actual[-1]
+        if len(raiz.ping_adaptado) == 0:
+            if nuevo == None:
+                raiz.ping_adaptado.append(1000)
+            else:
+                raiz.ping_adaptado.append(nuevo)
+        else:
+            viejo = raiz.ping_adaptado[-1]
+            if nuevo == None:
+                raiz.ping_adaptado.append((viejo + raiz.ping_prom[-1]) / 2)
+            else:
+                raiz.ping_adaptado.append((viejo + nuevo) / 2)
+        eliminar_pings_vencidos(raiz.ping_adaptado)
+
+
 def cantidad_pings(raiz):
     return len(raiz.ping_actual)
 
 
+# Descontinuado
 def adaptar_pings(raiz):
-    pings =raiz.ping_actual
+    pings = raiz.ping_actual
     cant_real = len(pings)
     # print("    ")
     # print(cant_real)
     cant_adapt = 60
-    if cant_real<=cant_adapt:
+    if cant_real <= cant_adapt:
         return pings
     pings_adaptados = []
     factor_adaptacion = cant_real / cant_adapt
@@ -346,4 +364,3 @@ def adaptar_pings(raiz):
         ping_anterior = prom
     # print(len(pings_adaptados))
     return pings_adaptados
-
