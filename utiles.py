@@ -1,4 +1,5 @@
 import sys
+from itertools import count
 
 import bdatos
 import configparser
@@ -234,11 +235,12 @@ def esperar(tiempo_de_espera):
     if tiempo_de_espera > 0:
         time.sleep(tiempo_de_espera)
 
+
 def max_eje_y(raiz):
     raiz.ping_actual
     raiz.ping_max
     regular = int(regular_ping())
-    if(len(raiz.ping_actual)>0):
+    if (len(raiz.ping_actual) > 0):
         list = []
         list.append(max([0 if x == None else x for x in raiz.ping_actual]))
         list.append(max([0 if x == "---" else x for x in raiz.ping_max]))
@@ -250,9 +252,10 @@ def max_eje_y(raiz):
             if value <= mal:
                 return mal
             else:
-                return int(round(value, -2)+100)
+                return int(round(value, -2) + 100)
     else:
         return regular
+
 
 def obtener_max(raiz):
     max_pi = maximo_ping(raiz.ping_actual)
@@ -261,12 +264,14 @@ def obtener_max(raiz):
     raiz.ping_max.append(max_pi)
     eliminar_pings_vencidos(raiz.ping_max)
 
+
 def obtener_min(raiz):
     min_pi = minimo_ping(raiz.ping_actual)
     if min_pi == "---":
         min_pi = 0
     raiz.ping_min.append(min_pi)
     eliminar_pings_vencidos(raiz.ping_min)
+
 
 def obtener_prom(raiz):
     prom_pi = promedio_ping(raiz.ping_actual)
@@ -275,6 +280,7 @@ def obtener_prom(raiz):
     raiz.ping_prom.append(prom_pi)
     eliminar_pings_vencidos(raiz.ping_prom)
 
+
 def obtener_loss(raiz):
     loss_pi = perdida_ping(raiz.ping_actual)
     if loss_pi == "---":
@@ -282,7 +288,62 @@ def obtener_loss(raiz):
     raiz.ping_loss.append(loss_pi)
     eliminar_pings_vencidos(raiz.ping_loss)
 
+
 def cantidad_pings(raiz):
     return len(raiz.ping_actual)
 
+
+def adaptar_pings(raiz):
+    pings =raiz.ping_actual
+    cant_real = len(pings)
+    # print("    ")
+    # print(cant_real)
+    cant_adapt = 60
+    if cant_real<=cant_adapt:
+        return pings
+    pings_adaptados = []
+    factor_adaptacion = cant_real / cant_adapt
+    # print(factor_adaptacion)
+    ping_anterior = 0
+    first = True
+    rango_neto = 0
+    for i in range(cant_adapt):
+        suma = 0
+        old_rango = int(rango_neto)
+        # print(old_rango)
+        rango_neto = rango_neto + factor_adaptacion
+        # print(rango_neto)
+        rango = int(rango_neto)
+        # print(rango)
+        vacio = True
+        aux_rango = rango - old_rango
+        # print(aux_rango)
+        for j in range(aux_rango):
+            pin = pings[rango + j - aux_rango]
+            if pin == None:
+                pin = 1000
+            else:
+                vacio = False
+            suma = suma + pin
+        if vacio:
+            prom = None
+        else:
+            prom = suma / aux_rango
+        if first:
+            for k in range(aux_rango - 1):
+                pings_adaptados.append(pings[k])
+            first = False
+        else:
+            if prom == None:
+                pings_adaptados.append(None)
+            else:
+                if ping_anterior == None:
+                    ping_anterior = 1000
+                t = (prom - ping_anterior) / aux_rango
+                for k in range(aux_rango - 1):
+                    pings_adaptados.append(ping_anterior + ((k + 1) * t))
+        pings_adaptados.append(prom)
+        ping_anterior = prom
+    # print(len(pings_adaptados))
+    return pings_adaptados
 
