@@ -10,13 +10,20 @@ VSVersionInfo(
     date=(0, 0)
   ),
   kids=[
-    StringFileInfo([
+    StringFileInfo(
+    '040904B0',
+    [
       StringStruct('CompanyName', 'Potome'),
       StringStruct('FileDescription', 'Medidor de latencia de servidores y sitios webs ya sea por ip o por URL.'),
       StringStruct('FileVersion', '1.11.0.0'),
       StringStruct('ProductName', 'Realm Edit'),
+      StringStruct('InternalName', 'Realm Edit'),
+      StringStruct('LegalCopyright', 'Copyright © 2026 Potome. Todos los derechos reservados.'),
+      StringStruct('OriginalFilename', 'Realm Edit v1.11.exe'),
+      StringStruct('PrivateBuild', 'Edicion Estandar'),
+      StringStruct('SpecialBuild', 'Edicion Estandar'),
       StringStruct('ProductVersion', '1.11.0.0')
     ]),
-    VarFileInfo([VarStruct('Translation', [2052, 1200])]) # 2052 es para español simplificado
+    VarFileInfo([VarStruct('Translation', [1033, 1200])]) # 2052 es para español simplificado
   ]
 )
