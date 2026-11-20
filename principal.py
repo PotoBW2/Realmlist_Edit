@@ -181,5 +181,10 @@ raiz.update()
 raiz.geometry("+" + str(round(raiz.winfo_screenwidth() / 2 - raiz.winfo_reqwidth() / 2)) + "+" + str(
     round(raiz.winfo_screenheight() / 2 - raiz.winfo_reqheight() / 2)))
 raiz.update()
-
+try:
+    import pyi_splash
+    pyi_splash.close()
+except ImportError:
+    pass
 raiz.mainloop()
+
