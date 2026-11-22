@@ -22,6 +22,7 @@ def cambiar_servidor_principal(raiz, e, padre):
     padre.ping_min = []
     padre.ping_prom = []
     padre.ping_loss = []
+    padre.ping_adaptado = []
     cerrar_ventana_configuracion(padre, raiz)
 
 

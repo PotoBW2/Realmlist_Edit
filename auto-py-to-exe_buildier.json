@@ -15,7 +15,7 @@
   },
   {
    "optionDest": "console",
-   "value": false
+   "value": true
   },
   {
    "optionDest": "icon_file",
@@ -23,7 +23,7 @@
   },
   {
    "optionDest": "name",
-   "value": "Realm Edit 1.11 upx clean splash disable-windowed-traceback version-file"
+   "value": "Realm Edit v1.11 all"
   },
   {
    "optionDest": "upx_dir",
@@ -47,7 +47,7 @@
   },
   {
    "optionDest": "disable_windowed_traceback",
-   "value": true
+   "value": false
   },
   {
    "optionDest": "version_file",
@@ -72,6 +72,22 @@
   {
    "optionDest": "datas",
    "value": "E:/trabajos/Realm Edit/imagenes;imagenes/"
+  },
+  {
+   "optionDest": "excludes",
+   "value": "certifi"
+  },
+  {
+   "optionDest": "excludes",
+   "value": "contourpy"
+  },
+  {
+   "optionDest": "excludes",
+   "value": "typing_extensions"
+  },
+  {
+   "optionDest": "excludes",
+   "value": "tzdata"
   }
  ],
  "nonPyinstallerOptions": {
