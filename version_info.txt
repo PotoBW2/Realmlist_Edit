@@ -1,8 +1,8 @@
 
 VSVersionInfo(
     ffi=FixedFileInfo(
-        filevers=(1, 11, 2, 0),
-        prodvers=(1, 11, 2, 0),
+        filevers=(1, 12, 1, 0),
+        prodvers=(1, 12, 1, 0),
         mask=0x3f,
         flags=0x0,
         OS=0x40004,
@@ -18,14 +18,14 @@ VSVersionInfo(
                     [
                         StringStruct('CompanyName', 'Potome'),
                         StringStruct('FileDescription', 'Medidor de latencia de servidores y sitios web mediante IP o URL.'),
-                        StringStruct('FileVersion', '1.11.2.0'),
-                        StringStruct('ProductName', 'Realm Edit'),
-                        StringStruct('InternalName', 'Realm Edit'),
+                        StringStruct('FileVersion', '1.12.1.0'),
+                        StringStruct('ProductName', 'Realmlist WoW Editor'),
+                        StringStruct('InternalName', 'Realmlist WoW Editor'),
                         StringStruct('LegalCopyright', 'Copyright (C) 2026 Potome. Todos los derechos reservados.'),
-                        StringStruct('OriginalFilename', 'Realm Edit v1.11.exe'),
+                        StringStruct('OriginalFilename', 'Realm Edit v1.12.exe'),
                         StringStruct('PrivateBuild', 'Edicion Estandar'),
                         StringStruct('SpecialBuild', 'Edicion Estandar'),
-                        StringStruct('ProductVersion', '1.11.2.0')
+                        StringStruct('ProductVersion', '1.12.1.0')
                     ]
                 )
             ]
