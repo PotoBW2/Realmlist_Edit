@@ -15,7 +15,7 @@
   },
   {
    "optionDest": "console",
-   "value": true
+   "value": false
   },
   {
    "optionDest": "icon_file",
@@ -23,7 +23,7 @@
   },
   {
    "optionDest": "name",
-   "value": "Realm Edit v1.11 all"
+   "value": "Realmlist WoW Edit v1.12"
   },
   {
    "optionDest": "upx_dir",
